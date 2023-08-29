@@ -28,6 +28,7 @@
 #define buttonPin D6
 #define buzzerpin D3
 #define LED D0
+#define analog_meter A0
 
 
 unsigned long last_time = 0;
@@ -444,6 +445,10 @@ void loop() {
  display.clearDisplay();
  TP2 = digitalRead(buttonPin); 
  TP1 = digitalRead(D5);
+ int analog = analogRead(analog_meter);
+ int Level_analog = map(analog,0,1023,0,3);
+ int Bar_levelA = map(analog,0,1023,0,10);
+Serial.print(analog);
 display.setTextSize(1);
 display.setCursor(15, 5);
 display.setTextColor(SH110X_WHITE);
@@ -468,7 +473,7 @@ if(TP2 == 1){
 // if (SW == 0 || SW == 1 || SW == 2 || SW == 3 && SW2 == 1 && TP2 == 1){
 //   SW2 == 0;
 // }
-
+SW = Level_analog;
 if(SW == 0){
   display.setTextSize(2);
   display.setTextColor(SH110X_WHITE);
@@ -526,22 +531,23 @@ if(SW == 3){
 }
 }
 
-if(TP1 == 1){
-  delay(500);
-  SW++;
-      for (int i = 0; i <= 10; i++) {
-        bar.setLevel(i);
-        delay(50);
-    }
-    digitalWrite(buzzerpin,1);
-    digitalWrite(LED,1);
-    delay(60);
-    digitalWrite(buzzerpin,0);
-    digitalWrite(LED,0);
-   if (SW > 3){
-     SW = 0;
- }
-}
+// if(TP1 == 1){
+//   delay(500);
+//   SW++;
+//       for (int i = 0; i <= 10; i++) {
+//         bar.setLevel(i);
+//         delay(50);
+//     }
+//     digitalWrite(buzzerpin,1);
+//     digitalWrite(LED,1);
+//     delay(60);
+//     digitalWrite(buzzerpin,0);
+//     digitalWrite(LED,0);
+//    if (SW > 3){
+//      SW = 0;
+//  }
+// }
+bar.setLevel(Bar_levelA);
 display.display();
 }
 
